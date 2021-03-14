@@ -1,13 +1,23 @@
 import streamlit as st
 
-
+import tensorflow as tf
 from PIL import Image
 import os
 import pickle as pkle
 import cv2 as cv
 from collections import OrderedDict
 
-
+def predict(image):
+    loaded_model = model_from_json(loaded_model_json)
+# load weights into new model
+    loaded_model.load_weights("/content/drive/MyDrive/IDAO/idao_dataset/model_inception.h5")
+    print("Loaded model from disk")
+    img=cv.imread(filepath)
+    img=cv.resize(img,(250,250))
+    img.shape
+    img=np.array([img])
+    resultant_prediction=loaded_model.predict(img)
+    return(resultant_prediction)
 def main():
     page_bg_img = '''
     <style>
@@ -37,21 +47,13 @@ def main():
 
     uploaded_file = st.file_uploader("Choose an image...", type="jpg")
     if uploaded_file is not None:
-        r=uploaded_file.__dict__
-        if('clean' in r['name']):
-            tagline='Sit and just appreciate the beauty around you!'
-            label=9
-        else:
-            tagline='You need a Marie Kondo to clear it up!'
-            label=4
-    
         image = Image.open(uploaded_file)
         img_show='''<img width= "800px" height="300px" src={image} text-align='center'></img>
         '''
-        st.image(image, caption='Uploaded Image.', width=300 )
+        st.image(image, caption='Uploaded Image.', width=350 )
 
         st.write("")
-
+        label=predict(image)
     
      
        
